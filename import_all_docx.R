@@ -1,27 +1,28 @@
 import_all_docx <- function() {
      
-     # Load required packages
+     # load required packages
      
      library(readtext)
 
-     # set working directory to data directory for importing files
+     # set working directory to 'data' before importing files
      
      setwd(paste(getwd(), "data", sep = "/"))
      
-     # make vector_files list of file names in 'data' sub-directory
+     # make vector_files list of files stored in 'data' directory
      
      vector_files <- list.files()
      
-     # automated rbind operation on an lapply of 'readtext' function on list
-     # of files names contained in vector_files.
+     # function call sequential append row rbind operations applying 'readtext' 
+     # package over vector_files to import file content into a 'readtext' and 
+     # 'data.frame' class object.
      
      df_output <- do.call("rbind", lapply(vector_files, readtext))
      
-     # subset df_output to extract data.frame element created by readtext
+     # subset df_output to extract 'data.frame' element created by 'readtext'
      
      df_output <- as.data.frame(df_output[[2]])
      
-     # split text in df_output[[2]] by the new line \\n character string
+     # split text in df_output[[2]] by new line \\n character string
      
      df_output <- strsplit(df_output$`df_output[[2]]`, "\\n")
      
@@ -29,16 +30,18 @@ import_all_docx <- function() {
      
      vector_output_text <- unlist(df_output)
      
-     # calculate number of lines in the readtext data based on vector length
+     # make vector_rep_filename with length of character vectors that will
+     # equal the number of lines in each source file
      
      vector_rep_filename <- as.vector(unlist(lapply(df_output, length)))
      
-     # repeat vector_files filename number of times as per vector_rep_filename
+     # make vector_filenames list that repeats vector_files 
+     # vector_rep_filename times
      
      vector_filenames <- rep(vector_files, vector_rep_filename)
      
      # transform the 2 character vectors filenames and output_text into data
-     # frames and bind together, thereby joining the original file name with 
+     # frames and bind columns together, joining the original file name with 
      # the associated imported text. allows for quality assurance of the import 
      # process
      
